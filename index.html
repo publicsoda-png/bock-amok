@@ -125,27 +125,6 @@ body {
 	font-variant-numeric: tabular-nums;
 	min-height: 1em;
 }
-#rotate-hint {
-	position: fixed;
-	left: 50%;
-	top: calc(env(safe-area-inset-top, 0px) + 14px);
-	transform: translateX(-50%);
-	padding: 9px 16px;
-	background: rgba(26, 25, 25, 0.82);
-	border: 1px solid rgba(242, 241, 238, 0.25);
-	border-radius: 2px;
-	color: var(--white);
-	font-size: 13px;
-	font-weight: 600;
-	white-space: nowrap;
-	pointer-events: none;
-	opacity: 0;
-	transition: opacity 0.5s;
-	z-index: 3;
-}
-#rotate-hint.on {
-	opacity: 1;
-}
 #status-notice {
 	display: none;
 	max-width: 520px;
@@ -171,6 +150,156 @@ body {
 	font-size: 14px;
 	text-decoration: none;
 	border-radius: 2px;
+}
+/* "Tryk for at starte/fortsætte": loaderen bliver stående som tryk-lag (touch), efter at hovedpakken er klar */
+#status.tap {
+	cursor: pointer;
+}
+#status.tap #status-bar {
+	display: none;
+}
+#status.tap #status-pct {
+	font-size: 14px;
+	letter-spacing: 0.16em;
+	color: var(--white);
+	animation: tap-pulse 1.6s ease-in-out infinite;
+}
+@keyframes tap-pulse {
+	50% { opacity: 0.45; }
+}
+/* Telefon i portræt: vedvarende, blokerende (som RPG'ens "Drej telefonen på tværs") — forsvinder i landskab */
+#rotate {
+	position: fixed;
+	inset: 0;
+	z-index: 20;
+	display: none;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	gap: 18px;
+	background: var(--charcoal);
+	text-align: center;
+	padding: 0 16px;
+}
+#rotate.on {
+	display: flex;
+}
+#rotate img {
+	width: 110px;
+	height: auto;
+	animation: rotate-tilt 2.4s ease-in-out infinite;
+}
+@keyframes rotate-tilt {
+	0%, 35% { transform: rotate(0deg); }
+	55%, 90% { transform: rotate(-90deg); }
+}
+#rotate div {
+	font-family: "Cloister Black", serif;
+	font-size: clamp(32px, 9vw, 48px);
+	line-height: 1.1;
+}
+/* Fælles fejl-lag: øverst, ét tryk genindlæser */
+#sa-error {
+	position: fixed;
+	inset: 0;
+	z-index: 30;
+	display: none;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	gap: 12px;
+	background: rgba(26, 25, 25, 0.94);
+	text-align: center;
+	padding: 0 16px;
+	cursor: pointer;
+}
+#sa-error.on {
+	display: flex;
+}
+#sa-error .t {
+	font-family: "Cloister Black", serif;
+	font-size: clamp(36px, 8vw, 64px);
+	line-height: 1;
+}
+#sa-error .s {
+	font-size: 14px;
+	font-weight: 600;
+	letter-spacing: 0.12em;
+}
+#sa-error .d {
+	font-size: 11px;
+	color: rgba(242, 241, 238, 0.4);
+	max-width: 520px;
+	overflow-wrap: anywhere;
+}
+/* Ekstra pakker (gaden/rpg): diskret bjælke nederst, når loaderen er væk; "Prøv igen" ved fejl */
+#pack {
+	position: fixed;
+	left: 50%;
+	bottom: calc(env(safe-area-inset-bottom, 0px) + 10px);
+	transform: translateX(-50%);
+	z-index: 10;
+	display: none;
+	flex-direction: column;
+	align-items: center;
+	gap: 6px;
+	font-size: 11px;
+	font-weight: 600;
+	letter-spacing: 0.12em;
+	color: rgba(242, 241, 238, 0.6);
+	font-variant-numeric: tabular-nums;
+	pointer-events: none;
+	text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
+}
+#pack.on {
+	display: flex;
+}
+#pack-bar {
+	width: 140px;
+	height: 2px;
+	background: rgba(242, 241, 238, 0.15);
+}
+#pack-fill {
+	height: 100%;
+	width: 0%;
+	background: var(--white);
+	transition: width 0.2s;
+}
+#pack button {
+	display: none;
+	pointer-events: auto;
+	font: inherit;
+	font-size: 13px;
+	color: var(--charcoal);
+	background: var(--white);
+	border: 0;
+	border-radius: 2px;
+	padding: 9px 16px;
+	cursor: pointer;
+}
+#pack.err {
+	color: var(--white);
+	background: rgba(26, 25, 25, 0.88);
+	border: 1px solid rgba(242, 241, 238, 0.25);
+	border-radius: 2px;
+	padding: 10px 14px;
+}
+#pack.err #pack-bar {
+	display: none;
+}
+#pack.err button {
+	display: block;
+}
+/* Måler env(safe-area-inset-*) → window.saSafe (læses af Godot) */
+#sa-safe {
+	position: fixed;
+	left: 0;
+	top: 0;
+	width: 0;
+	height: 0;
+	visibility: hidden;
+	pointer-events: none;
+	padding: env(safe-area-inset-top, 0px) env(safe-area-inset-right, 0px) env(safe-area-inset-bottom, 0px) env(safe-area-inset-left, 0px);
 }
 noscript {
 	position: fixed;
@@ -211,10 +340,76 @@ noscript {
 			<div id="status-hint"></div>
 		</div>
 
-		<div id="rotate-hint">↻ Vend telefonen for den bedste oplevelse</div>
+		<div id="rotate"><img src="mascot.png" alt=""><div>Drej telefonen på tværs</div></div>
+		<div id="pack"><div id="pack-txt"></div><div id="pack-bar"><div id="pack-fill"></div></div><button id="pack-retry" type="button">Prøv igen</button></div>
+		<div id="sa-error"><div class="t">Noget gik galt</div><div class="s">TRYK FOR AT GENINDLÆSE</div><div class="d"></div></div>
+		<div id="sa-safe"></div>
+		<script>
+// Kører FØR Godot (index.js): fejl under indlæsning af wasm skal også fanges, og AudioContext-konstruktøren skal
+// være pakket ind, før Godots GodotAudio.init laver sin kontekst (den ligger i Emscripten-closuren og er ikke global).
+(function () {
+	// --- AudioContext: husk alle konteksterne, så shellen kan resume (iOS kræver et tryk) og suspend (skjult fane)
+	const ctxs = window.saAudio = [];
+	['AudioContext', 'webkitAudioContext'].forEach(function (k) {
+		const A = window[k];
+		if (!A) return;
+		const W = function () {
+			const c = new (Function.prototype.bind.apply(A, [null].concat(Array.from(arguments))))();
+			ctxs.push(c);
+			return c;
+		};
+		W.prototype = A.prototype;   // 'audioWorklet' in AudioContext.prototype og instanceof virker uændret
+		Object.setPrototypeOf(W, A);
+		window[k] = W;
+	});
+	window.saAudioResume = function () {
+		ctxs.forEach(function (c) { if (c.state !== 'running' && c.state !== 'closed') c.resume().catch(function () {}); });
+	};
+	window.saAudioSuspend = function () {
+		ctxs.forEach(function (c) { if (c.state === 'running') c.suspend().catch(function () {}); });
+	};
+
+	// --- Fælles fejl-lag
+	// Kendte harmløse beskeder (WebGL-advarsler fra driveren, Godots fysik-advarsel) må aldrig vise lag'et
+	const harmless = /bindBuffer|bufferSubData|not multiples of 4|Convex decomposing failed|ResizeObserver loop|GL_INVALID|WebGL: (?!CONTEXT_LOST)/i;
+	// Fatale beskeder fra Godot/Emscripten (printErr): wasm-abort og hukommelse
+	const fatal = /Aborted\(|Out of memory|Cannot enlarge memory|OOM|RuntimeError|memory access out of bounds|unreachable/i;
+	let shown = false;
+	window.saShowError = function (why) {
+		const msg = String(why || '');
+		if (harmless.test(msg)) return false;
+		console.error('SA FEJL-LAG: ' + msg);
+		if (shown) return true;
+		shown = true;
+		window.saPaused = true;
+		const el = document.getElementById('sa-error');
+		el.querySelector('.d').textContent = msg.slice(0, 240);
+		el.classList.add('on');
+		el.addEventListener('click', function () { location.reload(); });
+		return true;
+	};
+	window.saFatalPrint = function (msg) { return fatal.test(msg) && window.saShowError(msg); };
+	window.addEventListener('error', function (e) {
+		// ressource-fejl (img/script) har intet message; cross-origin "Script error." uden detaljer ignoreres
+		if (!e.message || e.message === 'Script error.') return;
+		window.saShowError(e.message);
+	});
+	window.addEventListener('unhandledrejection', function (e) {
+		const r = e.reason;
+		window.saShowError(r && r.message ? (r.name || 'Error') + ': ' + r.message : String(r));
+	});
+	// Godot kalder alert() ved webglcontextlost (blokerer siden) — vis vores lag i stedet
+	const nativeAlert = window.alert.bind(window);
+	window.alert = function (m) {
+		if (/context lost/i.test(String(m))) { window.saShowError('WebGL context lost'); return; }
+		nativeAlert(m);
+	};
+	document.getElementById('canvas').addEventListener('webglcontextlost', function () { window.saShowError('WebGL context lost'); });
+}());
+		</script>
 		<script src="index.js"></script>
 		<script>
-const GODOT_CONFIG = {"args":[],"canvasResizePolicy":2,"emscriptenPoolSize":8,"ensureCrossOriginIsolationHeaders":true,"executable":"index","experimentalVK":false,"fileSizes":{"index.pck":88858200,"index.wasm":39514754},"focusCanvas":true,"gdextensionLibs":[],"godotPoolSize":4};
+const GODOT_CONFIG = {"args":[],"canvasResizePolicy":2,"emscriptenPoolSize":8,"ensureCrossOriginIsolationHeaders":true,"executable":"index","experimentalVK":false,"fileSizes":{"index.pck":88922168,"index.wasm":39514754},"focusCanvas":true,"gdextensionLibs":[],"godotPoolSize":4};
 const GODOT_THREADS_ENABLED = false;
 const engine = new Engine(GODOT_CONFIG);
 
@@ -237,28 +432,108 @@ const engine = new Engine(GODOT_CONFIG);
 	}
 
 	let initializing = true;
+	const params = new URLSearchParams(window.location.search);
+	const ua = navigator.userAgent;
+	const isAndroid = /Android/.test(ua);
+	// Telefon/tablet (ikke en touch-laptop med mus): kun her vises tryk-laget og rotér-laget
+	const isTouch = /iPhone|iPad|iPod|Android/.test(ua) || (/Macintosh/.test(ua) && navigator.maxTouchPoints > 1)
+		|| (navigator.maxTouchPoints > 0 && window.matchMedia('(pointer: coarse)').matches);
 
-	// Portræt virker, men landskab er bedst: blød hint i toppen (blokerer intet, forsvinder efter 5 s)
-	const rotateHint = document.getElementById('rotate-hint');
-	let rotateTimer = 0;
-	function checkOrientation() {
-		const touch = navigator.maxTouchPoints > 0 || 'ontouchstart' in window;
-		const portrait = window.innerHeight > window.innerWidth;
-		clearTimeout(rotateTimer);
-		if (touch && portrait) {
-			rotateHint.classList.add('on');
-			rotateTimer = setTimeout(() => rotateHint.classList.remove('on'), 5000);
-		} else {
-			rotateHint.classList.remove('on');
-		}
+	// --- Pause: window.saPaused læses af Godot (client/walk/web_pause.gd, 4×/s) → get_tree().paused
+	// Grunde: fanen er skjult, tryk-laget venter på et tryk, eller telefonen står i portræt.
+	const why = { hidden: false, tap: false, portrait: false };
+	function setPause(k, v) {
+		why[k] = v;
+		const p = why.hidden || why.tap || why.portrait;
+		if (window.saPaused !== p) console.log('SA pause ' + (p ? 'on' : 'off') + ' (' + Object.keys(why).filter((x) => why[x]).join(',') + ')');
+		window.saPaused = p;
 	}
+	window.saPaused = false;
+
+	// --- Safe-area i CSS-px → window.saSafe = {t,r,b,l} (fase 0 læser den i Godot)
+	const safeEl = document.getElementById('sa-safe');
+	function measureSafe() {
+		const cs = getComputedStyle(safeEl);
+		window.saSafe = { t: parseFloat(cs.paddingTop) || 0, r: parseFloat(cs.paddingRight) || 0,
+			b: parseFloat(cs.paddingBottom) || 0, l: parseFloat(cs.paddingLeft) || 0 };
+	}
+	measureSafe();
+
+	// --- Portræt på telefon: vedvarende rotér-lag, væk i landskab
+	const rotateEl = document.getElementById('rotate');
+	function checkOrientation() {
+		const portrait = isTouch && window.innerHeight > window.innerWidth;
+		rotateEl.classList.toggle('on', portrait);
+		setPause('portrait', portrait);
+	}
+	function onResize() {
+		measureSafe();
+		checkOrientation();
+	}
+	window.addEventListener('resize', onResize);
+	window.addEventListener('orientationchange', () => setTimeout(onResize, 300));
+	checkOrientation();
+
+	// --- Lyd: et hvilket som helst tryk genoptager konteksten (iOS kræver en brugerhandling), medmindre vi er skjult
+	function gestureAudio() {
+		if (!document.hidden && !why.tap) window.saAudioResume();
+	}
+	document.addEventListener('touchend', gestureAudio, true);
+	document.addEventListener('pointerup', gestureAudio, true);
+	document.addEventListener('keydown', gestureAudio, true);
+
+	// --- Tryk-laget: loaderen bliver stående som "TRYK FOR AT STARTE" (kun telefon/tablet; desktop som før).
+	// ?tap=0 springer det over (webtests der trykker direkte på canvas).
+	const useTap = isTouch && params.get('tap') !== '0';
+	function showTap(text) {
+		statusOverlay.classList.add('tap');
+		statusOverlay.style.display = 'flex';
+		statusOverlay.style.visibility = 'visible';
+		statusPct.textContent = text;
+		statusHint.textContent = '';
+		setPause('tap', true);
+	}
+	function onTap(e) {
+		if (!why.tap) return;
+		e.preventDefault();
+		statusOverlay.style.display = 'none';
+		setPause('tap', false);
+		window.saAudioResume();
+		if (isAndroid && !document.fullscreenElement) {
+			try {
+				const el = document.documentElement;
+				const fs = el.requestFullscreen ? el.requestFullscreen({ navigationUI: 'hide' }) : null;
+				const lock = () => { try { if (screen.orientation && screen.orientation.lock) screen.orientation.lock('landscape').catch(() => {}); } catch (err) { /* ikke understøttet */ } };
+				if (fs && fs.then) fs.then(lock, () => {}); else lock();
+			} catch (err) { /* ikke understøttet */ }
+		}
+		document.getElementById('canvas').focus();
+	}
+	statusOverlay.addEventListener('click', onTap);
 
 	function hide() {
-		statusOverlay.remove();
 		initializing = false;
-		checkOrientation();
-		window.addEventListener('orientationchange', () => setTimeout(checkOrientation, 300));
+		if (useTap) showTap('TRYK FOR AT STARTE');
+		else statusOverlay.style.display = 'none';
 	}
+
+	// --- Skjult fane / app skiftet: lyd på pause + saPaused. Tilbage: desktop fortsætter straks; telefon får
+	// "TRYK FOR AT FORTSÆTTE" (iOS lader ofte konteksten stå "interrupted" til næste tryk).
+	function away() {
+		if (why.hidden) return;
+		setPause('hidden', true);
+		window.saAudioSuspend();
+	}
+	function back() {
+		if (!why.hidden || document.hidden) return;
+		setPause('hidden', false);
+		if (initializing) return;
+		if (useTap) showTap('TRYK FOR AT FORTSÆTTE');
+		else window.saAudioResume();
+	}
+	document.addEventListener('visibilitychange', () => (document.hidden ? away() : back()));
+	window.addEventListener('pagehide', away);
+	window.addEventListener('pageshow', (e) => { if (e.persisted) back(); });
 
 	function fail(err) {
 		console.error(err);
@@ -282,10 +557,10 @@ const engine = new Engine(GODOT_CONFIG);
 	}
 	// Delbart build (tools/web_share.sh): én pck pr. teksturformat, så hver fil holder sig under
 	// GitHub Pages' 100 MB-grænse. SA_PACKS udfyldes af scriptet; i almindelige builds er den null (én pck).
-	const SA_PACKS = {"s3tc": {"file": "index.pck", "size": 67575884, "extra": {"world": {"file": "world.pck", "size": 18968420, "lazy": false}, "rpg": {"file": "rpg.pck", "size": 2332096, "lazy": true}}}, "etc2": {"file": "index_mobile.pck", "size": 50827384, "extra": {"world": {"file": "world_mobile.pck", "size": 16084836, "lazy": false}, "rpg": {"file": "rpg_mobile.pck", "size": 2046304, "lazy": true}}}};
+	const SA_PACKS = {"s3tc": {"file": "index.pck", "size": 67639996, "extra": {"world": {"file": "world.pck", "size": 18968420, "lazy": false}, "rpg": {"file": "rpg.pck", "size": 2332096, "lazy": true}}}, "etc2": {"file": "index_mobile.pck", "size": 50867356, "extra": {"world": {"file": "world_mobile.pck", "size": 16084836, "lazy": false}, "rpg": {"file": "rpg_mobile.pck", "size": 2046304, "lazy": true}}}};
 	const override = {};
 	if (SA_PACKS) {
-		const forced = new URLSearchParams(window.location.search).get('pack');
+		const forced = params.get('pack');
 		let s3tc = false, etc2 = false;
 		try {
 			const gl = document.createElement('canvas').getContext('webgl2');
@@ -296,7 +571,6 @@ const engine = new Engine(GODOT_CONFIG);
 				if (lose) lose.loseContext();
 			}
 		} catch (e) { /* vælg desktop-pakken */ }
-		const ua = navigator.userAgent;
 		const mobile = /iPhone|iPad|iPod|Android/.test(ua) || (/Macintosh/.test(ua) && navigator.maxTouchPoints > 1);
 		const fmt = (forced && SA_PACKS[forced]) ? forced : ((etc2 && (mobile || !s3tc)) ? 'etc2' : 's3tc');
 		const p = SA_PACKS[fmt];
@@ -307,12 +581,44 @@ const engine = new Engine(GODOT_CONFIG);
 		// shared/packs.gd (Packs.ensure), når spillet første gang skal bruge dem.
 		window.SA_EXTRA = p.extra || null;
 	}
-	window.SA_PK = {};
-	window.saFetchPack = function (name) {
-		const e = window.SA_EXTRA && window.SA_EXTRA[name];
-		if (!e || window.SA_PK[name]) return;
-		const st = window.SA_PK[name] = { pct: 0, buf: null, err: null };
-		fetch(e.file).then(async (r) => {
+
+	// --- Ekstra pakker. SA_PK[name] = { pct, buf, err } læses af shared/packs.gd. Ved netværksfejl prøves der
+	// én gang automatisk; derefter vises "Prøv igen", og err forbliver tom, så spillet bliver ved med at vente
+	// ("Henter gaden … %") i stedet for at fortsætte uden teksturer. done/fail er kun til shellen.
+	const PACK_LABEL = { world: 'HENTER GADEN', rpg: 'INDSÆTTER MØNT' };
+	const packEl = document.getElementById('pack');
+	const packTxt = document.getElementById('pack-txt');
+	const packFill = document.getElementById('pack-fill');
+	let packTimer = 0;
+	function packUI() {
+		let active = null, failed = null;
+		for (const n in window.SA_PK) {
+			const st = window.SA_PK[n];
+			if (st.fail) failed = failed || n;
+			else if (!st.done) active = active || n;
+		}
+		packEl.classList.toggle('err', !!failed);
+		if (failed) {
+			packEl.classList.add('on');
+			packTxt.textContent = (failed === 'world' ? 'GADEN' : failed.toUpperCase()) + ' KUNNE IKKE HENTES';
+		} else if (active) {
+			const pct = window.SA_PK[active].pct || 0;
+			packEl.classList.add('on');
+			packTxt.textContent = (PACK_LABEL[active] || 'HENTER') + ' ' + pct + ' %';
+			packFill.style.width = pct + '%';
+		} else {
+			packEl.classList.remove('on');
+		}
+		if (!active && !failed) { clearInterval(packTimer); packTimer = 0; }
+	}
+	function packWatch() {
+		if (!packTimer) packTimer = setInterval(packUI, 200);
+		packUI();
+	}
+	function packRun(name, st, tries) {
+		const e = window.SA_EXTRA[name];
+		st.fail = null; st.pct = 0;
+		fetch(e.file, { cache: tries > 0 ? 'reload' : 'default' }).then(async (r) => {
 			if (!r.ok || !r.body) throw new Error('HTTP ' + r.status);
 			const out = new Uint8Array(e.size);
 			const rd = r.body.getReader();
@@ -327,9 +633,29 @@ const engine = new Engine(GODOT_CONFIG);
 			}
 			if (got !== e.size) throw new Error('fik ' + got + ' af ' + e.size + ' bytes');
 			st.buf = out.buffer;
+			st.done = true;
 			console.log('SA extra pack klar: ' + name + ' (' + got + ' bytes)');
-		}).catch((err) => { st.err = String(err); console.error('SA extra pack fejl: ' + name, err); });
+		}).catch((err) => {
+			console.warn('SA extra pack fejl: ' + name + ' (forsøg ' + (tries + 1) + ')', String(err));
+			if (tries < 1) setTimeout(() => packRun(name, st, tries + 1), 1500);
+			else st.fail = String(err);
+		});
+		packWatch();
+	}
+	window.SA_PK = {};
+	window.saFetchPack = function (name) {
+		const e = window.SA_EXTRA && window.SA_EXTRA[name];
+		if (!e || window.SA_PK[name]) return;
+		packRun(name, window.SA_PK[name] = { pct: 0, buf: null, err: null, done: false, fail: null }, 0);
 	};
+	document.getElementById('pack-retry').addEventListener('click', (ev) => {
+		ev.stopPropagation();
+		for (const n in window.SA_PK) {
+			const st = window.SA_PK[n];
+			if (st.fail) { console.log('SA extra pack prøv igen: ' + n); packRun(n, st, 0); }
+		}
+	});
+
 	engine.startGame({
 		'mainPack': override.mainPack,
 		'fileSizes': override.fileSizes,
@@ -339,6 +665,15 @@ const engine = new Engine(GODOT_CONFIG);
 				statusFill.style.width = pct + '%';
 				statusPct.textContent = pct < 100 ? pct + ' %' : 'Starter …';
 			}
+		},
+		// wasm-abort/OOM kommer som printErr ("Aborted(...)", "Cannot enlarge memory"); alt andet logges som før
+		'onPrintError': function () {
+			const args = Array.from(arguments);
+			console.error.apply(console, args);
+			window.saFatalPrint(args.join(' '));
+		},
+		'onExit': function (code) {
+			if (code !== 0) window.saShowError('Spillet stoppede (kode ' + code + ')');
 		},
 	}).then(() => {
 		hide();
