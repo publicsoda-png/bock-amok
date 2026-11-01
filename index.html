@@ -409,7 +409,7 @@ noscript {
 		</script>
 		<script src="index.js"></script>
 		<script>
-const GODOT_CONFIG = {"args":[],"canvasResizePolicy":2,"emscriptenPoolSize":8,"ensureCrossOriginIsolationHeaders":true,"executable":"index","experimentalVK":false,"fileSizes":{"index.pck":88922168,"index.wasm":39514754},"focusCanvas":true,"gdextensionLibs":[],"godotPoolSize":4};
+const GODOT_CONFIG = {"args":[],"canvasResizePolicy":2,"emscriptenPoolSize":8,"ensureCrossOriginIsolationHeaders":true,"executable":"index","experimentalVK":false,"fileSizes":{"index.pck":88922152,"index.wasm":39514754},"focusCanvas":true,"gdextensionLibs":[],"godotPoolSize":4};
 const GODOT_THREADS_ENABLED = false;
 const engine = new Engine(GODOT_CONFIG);
 
@@ -482,8 +482,25 @@ const engine = new Engine(GODOT_CONFIG);
 	document.addEventListener('pointerup', gestureAudio, true);
 	document.addEventListener('keydown', gestureAudio, true);
 
-	// --- Tryk-laget: loaderen bliver stående som "TRYK FOR AT STARTE" (kun telefon/tablet; desktop som før).
-	// ?tap=0 springer det over (webtests der trykker direkte på canvas).
+	// --- Android: første tryk i spillet (fx "GÅ IND") giver fuld skærm + landskabslås. Ét tryk, intet ekstra lag.
+	function androidFullscreen() {
+		if (!isAndroid || document.fullscreenElement) return;
+		try {
+			const el = document.documentElement;
+			const fs = el.requestFullscreen ? el.requestFullscreen({ navigationUI: 'hide' }) : null;
+			const lock = () => { try { if (screen.orientation && screen.orientation.lock) screen.orientation.lock('landscape').catch(() => {}); } catch (err) { /* ikke understøttet */ } };
+			if (fs && fs.then) fs.then(lock, () => {}); else lock();
+		} catch (err) { /* ikke understøttet */ }
+	}
+	function firstGesture() {
+		if (initializing || document.hidden) return;
+		document.removeEventListener('pointerup', firstGesture, true);
+		androidFullscreen();
+	}
+	document.addEventListener('pointerup', firstGesture, true);
+
+	// --- Tryk-laget: kun "TRYK FOR AT FORTSÆTTE" efter app-skift (telefon/tablet). Ved start går man direkte til
+	// spillets "GÅ IND" — dét tryk låser lyden op (gestureAudio). ?tap=0 slår også fortsæt-laget fra (webtests).
 	const useTap = isTouch && params.get('tap') !== '0';
 	function showTap(text) {
 		statusOverlay.classList.add('tap');
@@ -499,22 +516,14 @@ const engine = new Engine(GODOT_CONFIG);
 		statusOverlay.style.display = 'none';
 		setPause('tap', false);
 		window.saAudioResume();
-		if (isAndroid && !document.fullscreenElement) {
-			try {
-				const el = document.documentElement;
-				const fs = el.requestFullscreen ? el.requestFullscreen({ navigationUI: 'hide' }) : null;
-				const lock = () => { try { if (screen.orientation && screen.orientation.lock) screen.orientation.lock('landscape').catch(() => {}); } catch (err) { /* ikke understøttet */ } };
-				if (fs && fs.then) fs.then(lock, () => {}); else lock();
-			} catch (err) { /* ikke understøttet */ }
-		}
+		androidFullscreen();
 		document.getElementById('canvas').focus();
 	}
 	statusOverlay.addEventListener('click', onTap);
 
 	function hide() {
 		initializing = false;
-		if (useTap) showTap('TRYK FOR AT STARTE');
-		else statusOverlay.style.display = 'none';
+		statusOverlay.style.display = 'none';
 	}
 
 	// --- Skjult fane / app skiftet: lyd på pause + saPaused. Tilbage: desktop fortsætter straks; telefon får
@@ -557,7 +566,7 @@ const engine = new Engine(GODOT_CONFIG);
 	}
 	// Delbart build (tools/web_share.sh): én pck pr. teksturformat, så hver fil holder sig under
 	// GitHub Pages' 100 MB-grænse. SA_PACKS udfyldes af scriptet; i almindelige builds er den null (én pck).
-	const SA_PACKS = {"s3tc": {"file": "index.pck", "size": 67639996, "extra": {"world": {"file": "world.pck", "size": 18968420, "lazy": false}, "rpg": {"file": "rpg.pck", "size": 2332096, "lazy": true}}}, "etc2": {"file": "index_mobile.pck", "size": 50867356, "extra": {"world": {"file": "world_mobile.pck", "size": 16084836, "lazy": false}, "rpg": {"file": "rpg_mobile.pck", "size": 2046304, "lazy": true}}}};
+	const SA_PACKS = {"s3tc": {"file": "index.pck", "size": 67639964, "extra": {"world": {"file": "world.pck", "size": 18968420, "lazy": false}, "rpg": {"file": "rpg.pck", "size": 2332096, "lazy": true}}}, "etc2": {"file": "index_mobile.pck", "size": 50867324, "extra": {"world": {"file": "world_mobile.pck", "size": 16084836, "lazy": false}, "rpg": {"file": "rpg_mobile.pck", "size": 2046304, "lazy": true}}}};
 	const override = {};
 	if (SA_PACKS) {
 		const forced = params.get('pack');
