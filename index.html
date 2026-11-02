@@ -409,7 +409,7 @@ noscript {
 		</script>
 		<script src="index.js"></script>
 		<script>
-const GODOT_CONFIG = {"args":[],"canvasResizePolicy":2,"emscriptenPoolSize":8,"ensureCrossOriginIsolationHeaders":true,"executable":"index","experimentalVK":false,"fileSizes":{"index.pck":106383384,"index.wasm":39514754},"focusCanvas":true,"gdextensionLibs":[],"godotPoolSize":4};
+const GODOT_CONFIG = {"args":[],"canvasResizePolicy":2,"emscriptenPoolSize":8,"ensureCrossOriginIsolationHeaders":true,"executable":"index","experimentalVK":false,"fileSizes":{"index.pck":106399464,"index.wasm":39514754},"focusCanvas":true,"gdextensionLibs":[],"godotPoolSize":4};
 const GODOT_THREADS_ENABLED = false;
 const engine = new Engine(GODOT_CONFIG);
 
@@ -566,7 +566,7 @@ const engine = new Engine(GODOT_CONFIG);
 	}
 	// Delbart build (tools/web_share.sh): én pck pr. teksturformat, så hver fil holder sig under
 	// GitHub Pages' 100 MB-grænse. SA_PACKS udfyldes af scriptet; i almindelige builds er den null (én pck).
-	const SA_PACKS = {"s3tc": {"file": "index.pck", "size": 70043152, "extra": {"world": {"file": "world.pck", "size": 34031456, "lazy": false}, "rpg": {"file": "rpg.pck", "size": 2332096, "lazy": true}}}, "etc2": {"file": "index_mobile.pck", "size": 53104688, "extra": {"world": {"file": "world_mobile.pck", "size": 31147872, "lazy": false}, "rpg": {"file": "rpg_mobile.pck", "size": 2046304, "lazy": true}}}};
+	const SA_PACKS = {"s3tc": {"file": "index.pck", "size": 70059200, "extra": {"world": {"file": "world.pck", "size": 34031456, "lazy": false}, "rpg": {"file": "rpg.pck", "size": 2332096, "lazy": true}}}, "etc2": {"file": "index_mobile.pck", "size": 53120736, "extra": {"world": {"file": "world_mobile.pck", "size": 31147872, "lazy": false}, "rpg": {"file": "rpg_mobile.pck", "size": 2046304, "lazy": true}}}};
 	const override = {};
 	if (SA_PACKS) {
 		const forced = params.get('pack');
