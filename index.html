@@ -416,7 +416,7 @@ noscript {
 		</script>
 		<script src="index.js"></script>
 		<script>
-const GODOT_CONFIG = {"args":[],"canvasResizePolicy":2,"emscriptenPoolSize":8,"ensureCrossOriginIsolationHeaders":true,"executable":"index","experimentalVK":false,"fileSizes":{"index.pck":171453740,"index.wasm":39514754},"focusCanvas":true,"gdextensionLibs":[],"godotPoolSize":4};
+const GODOT_CONFIG = {"args":[],"canvasResizePolicy":2,"emscriptenPoolSize":8,"ensureCrossOriginIsolationHeaders":true,"executable":"index","experimentalVK":false,"fileSizes":{"index.pck":172418900,"index.wasm":39514754},"focusCanvas":true,"gdextensionLibs":[],"godotPoolSize":4};
 const GODOT_THREADS_ENABLED = false;
 const engine = new Engine(GODOT_CONFIG);
 
@@ -573,7 +573,7 @@ const engine = new Engine(GODOT_CONFIG);
 	}
 	// Delbart build (tools/web_share.sh): én pck pr. teksturformat, så hver fil holder sig under
 	// GitHub Pages' 100 MB-grænse. SA_PACKS udfyldes af scriptet; i almindelige builds er den null (én pck).
-	const SA_PACKS = {"s3tc": {"file": "index.pck", "size": 78028076, "extra": {"world": {"file": "world.pck", "size": 80901652, "lazy": false}, "rpg": {"file": "rpg.pck", "size": 2332096, "lazy": true}, "musik": {"file": "musik.pck", "size": 10229704, "lazy": true}}}, "etc2": {"file": "index_mobile.pck", "size": 61106136, "extra": {"world": {"file": "world_mobile.pck", "size": 77624852, "lazy": false}, "rpg": {"file": "rpg_mobile.pck", "size": 2046304, "lazy": true}, "musik": {"file": "musik_mobile.pck", "size": 10229704, "lazy": true}}}};
+	const SA_PACKS = {"s3tc": {"file": "index.pck", "size": 78993412, "extra": {"world": {"file": "world.pck", "size": 80901652, "lazy": false}, "rpg": {"file": "rpg.pck", "size": 2332096, "lazy": true}, "musik": {"file": "musik.pck", "size": 10229704, "lazy": true}}}, "etc2": {"file": "index_mobile.pck", "size": 62047332, "extra": {"world": {"file": "world_mobile.pck", "size": 77624852, "lazy": false}, "rpg": {"file": "rpg_mobile.pck", "size": 2046304, "lazy": true}, "musik": {"file": "musik_mobile.pck", "size": 10229704, "lazy": true}}}};
 	const override = {};
 	if (SA_PACKS) {
 		const forced = params.get('pack');
