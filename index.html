@@ -416,7 +416,7 @@ noscript {
 		</script>
 		<script src="index.js"></script>
 		<script>
-const GODOT_CONFIG = {"args":[],"canvasResizePolicy":2,"emscriptenPoolSize":8,"ensureCrossOriginIsolationHeaders":true,"executable":"index","experimentalVK":false,"fileSizes":{"index.pck":160837756,"index.wasm":39514754},"focusCanvas":true,"gdextensionLibs":[],"godotPoolSize":4};
+const GODOT_CONFIG = {"args":[],"canvasResizePolicy":2,"emscriptenPoolSize":8,"ensureCrossOriginIsolationHeaders":true,"executable":"index","experimentalVK":false,"fileSizes":{"index.pck":171077556,"index.wasm":39514754},"focusCanvas":true,"gdextensionLibs":[],"godotPoolSize":4};
 const GODOT_THREADS_ENABLED = false;
 const engine = new Engine(GODOT_CONFIG);
 
@@ -573,7 +573,7 @@ const engine = new Engine(GODOT_CONFIG);
 	}
 	// Delbart build (tools/web_share.sh): én pck pr. teksturformat, så hver fil holder sig under
 	// GitHub Pages' 100 MB-grænse. SA_PACKS udfyldes af scriptet; i almindelige builds er den null (én pck).
-	const SA_PACKS = {"s3tc": {"file": "index.pck", "size": 77781988, "extra": {"world": {"file": "world.pck", "size": 80761024, "lazy": false}, "rpg": {"file": "rpg.pck", "size": 2332096, "lazy": true}}}, "etc2": {"file": "index_mobile.pck", "size": 60860048, "extra": {"world": {"file": "world_mobile.pck", "size": 77484224, "lazy": false}, "rpg": {"file": "rpg_mobile.pck", "size": 2046304, "lazy": true}}}};
+	const SA_PACKS = {"s3tc": {"file": "index.pck", "size": 77792264, "extra": {"world": {"file": "world.pck", "size": 80761024, "lazy": false}, "rpg": {"file": "rpg.pck", "size": 2332096, "lazy": true}, "musik": {"file": "musik.pck", "size": 10229704, "lazy": true}}}, "etc2": {"file": "index_mobile.pck", "size": 60870324, "extra": {"world": {"file": "world_mobile.pck", "size": 77484224, "lazy": false}, "rpg": {"file": "rpg_mobile.pck", "size": 2046304, "lazy": true}, "musik": {"file": "musik_mobile.pck", "size": 10229704, "lazy": true}}}};
 	const override = {};
 	if (SA_PACKS) {
 		const forced = params.get('pack');
@@ -602,6 +602,8 @@ const engine = new Engine(GODOT_CONFIG);
 	// én gang automatisk; derefter vises "Prøv igen", og err forbliver tom, så spillet bliver ved med at vente
 	// ("Henter gaden … %") i stedet for at fortsætte uden teksturer. done/fail er kun til shellen.
 	const PACK_LABEL = { world: 'HENTER GADEN', rpg: 'INDSÆTTER MØNT' };
+	// stille pakker (soundtracket) hentes i baggrunden uden bjælke og uden fejl-lag: fejl = ingen musik
+	const PACK_QUIET = { musik: true };
 	const packEl = document.getElementById('pack');
 	const packTxt = document.getElementById('pack-txt');
 	const packFill = document.getElementById('pack-fill');
@@ -610,6 +612,7 @@ const engine = new Engine(GODOT_CONFIG);
 		let active = null, failed = null;
 		for (const n in window.SA_PK) {
 			const st = window.SA_PK[n];
+			if (PACK_QUIET[n]) continue;
 			if (st.fail) failed = failed || n;
 			else if (!st.done) active = active || n;
 		}
@@ -654,7 +657,7 @@ const engine = new Engine(GODOT_CONFIG);
 		}).catch((err) => {
 			console.warn('SA extra pack fejl: ' + name + ' (forsøg ' + (tries + 1) + ')', String(err));
 			if (tries < 1) setTimeout(() => packRun(name, st, tries + 1), 1500);
-			else st.fail = String(err);
+			else { st.fail = String(err); if (PACK_QUIET[name]) st.err = st.fail; }   // stille pakke: spillet giver op
 		});
 		packWatch();
 	}
