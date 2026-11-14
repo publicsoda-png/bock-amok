@@ -33,8 +33,8 @@
 	font-display: block;
 }
 :root {
-	/* Natrium-paletten (client/walk/walk_theme.gd): sort nat, natriumgul, creme. Navnene er roller. */
-	--charcoal: #0c0c0d;   /* NIGHT */
+	/* Natrium-paletten (client/walk/walk_theme.gd): violet nat, natriumgul, creme. Navnene er roller. */
+	--charcoal: #1c1830;   /* NIGHT */
 	--white: #ece6d6;      /* CREME */
 	--sodium: #e8b040;     /* SODIUM */
 	--sodium-lo: #a57b48;  /* SODIUM_LO */
@@ -416,7 +416,7 @@ noscript {
 		</script>
 		<script src="index.js"></script>
 		<script>
-const GODOT_CONFIG = {"args":[],"canvasResizePolicy":2,"emscriptenPoolSize":8,"ensureCrossOriginIsolationHeaders":true,"executable":"index","experimentalVK":false,"fileSizes":{"index.pck":186242280,"index.wasm":39514754},"focusCanvas":true,"gdextensionLibs":[],"godotPoolSize":4};
+const GODOT_CONFIG = {"args":[],"canvasResizePolicy":2,"emscriptenPoolSize":8,"ensureCrossOriginIsolationHeaders":true,"executable":"index","experimentalVK":false,"fileSizes":{"index.pck":182088636,"index.wasm":39514754},"focusCanvas":true,"gdextensionLibs":[],"godotPoolSize":4};
 const GODOT_THREADS_ENABLED = false;
 const engine = new Engine(GODOT_CONFIG);
 
@@ -573,7 +573,7 @@ const engine = new Engine(GODOT_CONFIG);
 	}
 	// Delbart build (tools/web_share.sh): én pck pr. teksturformat, så hver fil holder sig under
 	// GitHub Pages' 100 MB-grænse. SA_PACKS udfyldes af scriptet; i almindelige builds er den null (én pck).
-	const SA_PACKS = {"s3tc": {"file": "index.pck", "size": 19585292, "extra": {"intro": {"file": "intro.pck", "size": 83215432, "lazy": false}, "kiosk": {"file": "kiosk.pck", "size": 24360908, "lazy": false}, "world": {"file": "world.pck", "size": 35543268, "lazy": false}, "rpg": {"file": "rpg.pck", "size": 2332096, "lazy": true}, "musik": {"file": "musik.pck", "size": 21244040, "lazy": true}}}, "etc2": {"file": "index_mobile.pck", "size": 19471672, "extra": {"intro": {"file": "intro_mobile.pck", "size": 68520616, "lazy": false}, "kiosk": {"file": "kiosk_mobile.pck", "size": 19363852, "lazy": false}, "world": {"file": "world_mobile.pck", "size": 35150052, "lazy": false}, "rpg": {"file": "rpg_mobile.pck", "size": 2046304, "lazy": true}, "musik": {"file": "musik_mobile.pck", "size": 21244040, "lazy": true}}}};
+	const SA_PACKS = {"s3tc": {"file": "index.pck", "size": 19542776, "extra": {"intro": {"file": "intro.pck", "size": 50733752, "lazy": false}, "kiosk": {"file": "kiosk.pck", "size": 52916944, "lazy": false}, "world": {"file": "world.pck", "size": 35357688, "lazy": false}, "rpg": {"file": "rpg.pck", "size": 2332096, "lazy": true}, "musik": {"file": "musik.pck", "size": 21244040, "lazy": true}}}, "etc2": {"file": "index_mobile.pck", "size": 19404984, "extra": {"intro": {"file": "intro_mobile.pck", "size": 45214296, "lazy": false}, "kiosk": {"file": "kiosk_mobile.pck", "size": 38744528, "lazy": false}, "world": {"file": "world_mobile.pck", "size": 34964472, "lazy": false}, "rpg": {"file": "rpg_mobile.pck", "size": 2046304, "lazy": true}, "musik": {"file": "musik_mobile.pck", "size": 21244040, "lazy": true}}}};
 	const override = {};
 	if (SA_PACKS) {
 		const forced = params.get('pack');
