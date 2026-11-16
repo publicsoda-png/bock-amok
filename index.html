@@ -416,7 +416,7 @@ noscript {
 		</script>
 		<script src="index.js"></script>
 		<script>
-const GODOT_CONFIG = {"args":[],"canvasResizePolicy":2,"emscriptenPoolSize":8,"ensureCrossOriginIsolationHeaders":true,"executable":"index","experimentalVK":false,"fileSizes":{"index.pck":183420636,"index.wasm":39514754},"focusCanvas":true,"gdextensionLibs":[],"godotPoolSize":4};
+const GODOT_CONFIG = {"args":[],"canvasResizePolicy":2,"emscriptenPoolSize":8,"ensureCrossOriginIsolationHeaders":true,"executable":"index","experimentalVK":false,"fileSizes":{"index.pck":183382236,"index.wasm":39514754},"focusCanvas":true,"gdextensionLibs":[],"godotPoolSize":4};
 const GODOT_THREADS_ENABLED = false;
 const engine = new Engine(GODOT_CONFIG);
 
@@ -573,7 +573,7 @@ const engine = new Engine(GODOT_CONFIG);
 	}
 	// Delbart build (tools/web_share.sh): én pck pr. teksturformat, så hver fil holder sig under
 	// GitHub Pages' 100 MB-grænse. SA_PACKS udfyldes af scriptet; i almindelige builds er den null (én pck).
-	const SA_PACKS = {"s3tc": {"file": "index.pck", "size": 20589504, "extra": {"intro": {"file": "intro.pck", "size": 51020016, "lazy": false}, "kiosk": {"file": "kiosk.pck", "size": 52916976, "lazy": false}, "world": {"file": "world.pck", "size": 35357688, "lazy": false}, "rpg": {"file": "rpg.pck", "size": 2332096, "lazy": true}, "musik": {"file": "musik.pck", "size": 21244040, "lazy": true}}}, "etc2": {"file": "index_mobile.pck", "size": 20451712, "extra": {"intro": {"file": "intro_mobile.pck", "size": 45500560, "lazy": false}, "kiosk": {"file": "kiosk_mobile.pck", "size": 38744560, "lazy": false}, "world": {"file": "world_mobile.pck", "size": 34964472, "lazy": false}, "rpg": {"file": "rpg_mobile.pck", "size": 2046304, "lazy": true}, "musik": {"file": "musik_mobile.pck", "size": 21244040, "lazy": true}}}};
+	const SA_PACKS = {"s3tc": {"file": "index.pck", "size": 20541864, "extra": {"intro": {"file": "intro.pck", "size": 51029160, "lazy": false}, "kiosk": {"file": "kiosk.pck", "size": 52916976, "lazy": false}, "world": {"file": "world.pck", "size": 35357688, "lazy": false}, "rpg": {"file": "rpg.pck", "size": 2332096, "lazy": true}, "musik": {"file": "musik.pck", "size": 21244040, "lazy": true}}}, "etc2": {"file": "index_mobile.pck", "size": 20428212, "extra": {"intro": {"file": "intro_mobile.pck", "size": 45509704, "lazy": false}, "kiosk": {"file": "kiosk_mobile.pck", "size": 38744560, "lazy": false}, "world": {"file": "world_mobile.pck", "size": 34964472, "lazy": false}, "rpg": {"file": "rpg_mobile.pck", "size": 2046304, "lazy": true}, "musik": {"file": "musik_mobile.pck", "size": 21244040, "lazy": true}}}};
 	const override = {};
 	if (SA_PACKS) {
 		const forced = params.get('pack');
